@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "lastfm"
+version = "0.1.0"
+description = ""
+authors = ["tadamcz <tadamczewskipublic@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pylast = "^5.1.0"
+python-dotenv = "^1.0.0"
+humanize = "^4.6.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
