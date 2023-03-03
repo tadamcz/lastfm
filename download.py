@@ -7,6 +7,8 @@ import humanize as humanize
 import pylast
 from dotenv import load_dotenv
 
+from pylast_subclass import User, PlayedTrack
+
 load_dotenv()
 
 # Obtain yours from https://www.last.fm/api/account/create for Last.fm
@@ -15,20 +17,28 @@ API_SECRET = os.environ["LASTFM_API_SECRET"]
 USERNAME = os.environ["LASTFM_USERNAME"]
 
 network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET)
-user = network.get_user(USERNAME)
+user = User(USERNAME, network)
 
 
-def to_dict(o: pylast.Track | pylast.PlayedTrack):
-    """Follow the structure of pylast.PlayedTrack, even though I'm not sure why they use this two-level structure."""
-    if isinstance(o, pylast.Track):
-        return {"title": o.title, "artist": o.artist.name}
-    if isinstance(o, pylast.PlayedTrack):
-        return {
-            "track": to_dict(o.track),
-            "album": o.album,
-            "playback_date": o.playback_date,
-            "playback_timestamp": o.timestamp,
-        }
+def to_dict(obj: PlayedTrack):
+    return {
+        "track": {
+            "title": obj.track.title,
+            "mbid": obj.mbid,
+        },
+        "album": {
+            "title": obj.album,
+            "mbid": obj.album_mbid,
+        },
+        "artist": {
+            "name": obj.track.artist.name,
+            "mbid": obj.artist_mbid,
+        },
+        "playback_datetime": {
+            "human": obj.playback_date,
+            "unix": obj.timestamp,
+        },
+    }
 
 
 def tracks_gen():
@@ -43,7 +53,6 @@ def tracks_gen():
         for track in tracks:
             yield track
         time_to = int(tracks[-1].timestamp)
-
 
 
 dir = "data"
