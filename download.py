@@ -77,6 +77,8 @@ with open(stem + ".json", "w") as f:
     json.dump(tracks, f, cls=PlayedTrackEncoder, indent=2)
     print("done")
 
+sizes = {}
 for ext in [".json", ".pickle"]:
-    size = os.path.getsize(stem + ext)
-    print(f"{stem + ext: <40} {humanize.naturalsize(size)}")
+    bytes = os.path.getsize(stem + ext)
+    sizes[stem+ext] = humanize.naturalsize(bytes)
+print(tabulate(sizes.items(), headers=("File", "Size")))
