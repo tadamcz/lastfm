@@ -45,7 +45,9 @@ def tracks_gen():
     time_to = datetime.datetime.now().timestamp()
     OLDEST = user.get_unixtime_registered()
     while time_to > OLDEST:
-        print(f"Getting tracks played before {datetime.datetime.fromtimestamp(time_to)}... ", end="")
+        print(
+            f"Getting tracks played before {datetime.datetime.fromtimestamp(time_to)}... ", end=""
+        )
         tracks = user.get_recent_tracks(time_to=time_to, time_from=OLDEST, limit=500)
         print(f"got {len(tracks)} tracks")
         if not tracks:
@@ -68,8 +70,10 @@ distance_frac = abs((n_tracks_found - api_play_count) / api_play_count)
 print(f"Total: {n_tracks_found} tracks")
 
 if n_tracks_found != api_play_count:
-    print(f"Warning: number of tracks found ({n_tracks_found}) does not match API play count ({api_play_count}). "
-          f"This is a {distance_frac * 100:.0f}% difference.")
+    print(
+        f"Warning: number of tracks found ({n_tracks_found}) does not match API play count ({api_play_count}). "
+        f"This is a {distance_frac * 100:.0f}% difference."
+    )
 
 with open(stem + ".pickle", "wb") as f:
     print("Running pickle.dump()...", end=" ")

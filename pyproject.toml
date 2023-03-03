@@ -12,6 +12,12 @@ python-dotenv = "^1.0.0"
 humanize = "^4.6.0"
 
 
+[tool.poetry.group.dev.dependencies]
+black = {extras = ["d"], version = "^23.1.0"}
+
+[tool.black]
+line-length = 100
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -3,7 +3,8 @@ import collections
 from pylast import User as _User, _extract, Track
 
 PlayedTrack = collections.namedtuple(
-    "PlayedTrack", ["track", "album", "playback_date", "timestamp", "mbid", "artist_mbid", "album_mbid"]
+    "PlayedTrack",
+    ["track", "album", "playback_date", "timestamp", "mbid", "artist_mbid", "album_mbid"],
 )
 
 
@@ -20,5 +21,11 @@ class User(_User):
         album_mbid = track_node.getElementsByTagName("album")[0].getAttribute("mbid") or None
 
         return PlayedTrack(
-            Track(track_artist, title, self.network), album, date, timestamp, mbid, artist_mbid, album_mbid
+            Track(track_artist, title, self.network),
+            album,
+            date,
+            timestamp,
+            mbid,
+            artist_mbid,
+            album_mbid,
         )
