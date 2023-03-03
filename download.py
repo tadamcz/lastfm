@@ -1,3 +1,4 @@
+import dataclasses
 import datetime
 import json
 import os
@@ -20,25 +21,11 @@ network = pylast.LastFMNetwork(api_key=API_KEY, api_secret=API_SECRET)
 user = User(USERNAME, network)
 
 
-def to_dict(obj: PlayedTrack):
-    return {
-        "track": {
-            "title": obj.track.title,
-            "mbid": obj.mbid,
-        },
-        "album": {
-            "title": obj.album,
-            "mbid": obj.album_mbid,
-        },
-        "artist": {
-            "name": obj.track.artist.name,
-            "mbid": obj.artist_mbid,
-        },
-        "playback_datetime": {
-            "human": obj.playback_date,
-            "unix": obj.timestamp,
-        },
-    }
+class PlayedTrackEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, PlayedTrack):
+            return dataclasses.asdict(o)
+        return json.JSONEncoder.default(self, o)
 
 
 def tracks_gen():
@@ -54,7 +41,7 @@ def tracks_gen():
             break
         for track in tracks:
             yield track
-        time_to = int(tracks[-1].timestamp)
+        time_to = int(tracks[-1].playback_datetime.unix)
 
 
 dir = "data"
@@ -82,8 +69,7 @@ with open(stem + ".pickle", "wb") as f:
 
 with open(stem + ".json", "w") as f:
     print("Running json.dump()...", end=" ")
-    tracks = [to_dict(track) for track in tracks]
-    json.dump(tracks, f, indent=2)
+    json.dump(tracks, f, cls=PlayedTrackEncoder, indent=2)
     print("done")
 
 for ext in [".json", ".pickle"]:
