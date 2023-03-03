@@ -58,9 +58,9 @@ api_play_count = user.get_playcount()
 distance_frac = abs((n_tracks_found - api_play_count) / api_play_count)
 print(f"Total: {n_tracks_found} tracks")
 
-if n_tracks_found != api_play_count:
+if distance_frac > 0.01:
     print(
-        f"Warning: number of tracks found ({n_tracks_found}) does not match API play count ({api_play_count}). "
+        f"Warning: number of tracks found ({n_tracks_found}) does not match total API play count for user {USERNAME} ({api_play_count}). "
         f"This is a {distance_frac * 100:.0f}% difference."
     )
 
@@ -80,5 +80,5 @@ with open(stem + ".json", "w") as f:
 sizes = {}
 for ext in [".json", ".pickle"]:
     bytes = os.path.getsize(stem + ext)
-    sizes[stem+ext] = humanize.naturalsize(bytes)
+    sizes[stem + ext] = humanize.naturalsize(bytes)
 print(tabulate(sizes.items(), headers=("File", "Size")))
