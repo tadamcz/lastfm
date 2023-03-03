@@ -7,7 +7,9 @@ import pickle
 import humanize as humanize
 import pylast
 from dotenv import load_dotenv
+from tabulate import tabulate
 
+import analyse
 from pylast_subclass import User, PlayedTrack
 
 load_dotenv()
@@ -61,6 +63,9 @@ if n_tracks_found != api_play_count:
         f"Warning: number of tracks found ({n_tracks_found}) does not match API play count ({api_play_count}). "
         f"This is a {distance_frac * 100:.0f}% difference."
     )
+
+null_mbid_frac = analyse.null_mbid_frac([played_track.track for played_track in tracks])
+print(tabulate(null_mbid_frac.items(), headers=("Field", "Fraction null MBIDs"), floatfmt=".0%"))
 
 with open(stem + ".pickle", "wb") as f:
     print("Running pickle.dump()...", end=" ")
