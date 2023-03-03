@@ -1,9 +1,9 @@
-from typing import Iterable
+from typing import Iterable, Sequence
 
 from pylast_subclass import Track
 
 
-def null_mbid_frac(tracks: Iterable[Track]):
+def null_mbid_frac(tracks: Sequence[Track]):
     counts = null_mbid_count(tracks)
     return {k: v / len(tracks) for k, v in counts.items()}
 
